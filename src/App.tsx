@@ -100,30 +100,22 @@ function ProductCardContent({ product }) {
   );
 }
 
-function ProductCard({ product }) {
-  return (
-    <Card>
-      <ProductCardContent product={product} />
-      <CardActions>
-        <Button component={Link} href={`/product/${product.id}`} size="small">
-          View
-        </Button>
-      </CardActions>
-    </Card>
-  );
-}
 function ProductPage() {
   const { id } = useParams();
 
+  const product = PRODUCTS[parseInt(id!)];
+
   return (
     <Stack sx={{ maxWidth: 600, margin: "auto" }}>
-      <ProductCardContent product={PRODUCTS[parseInt(id!)]} />
+      <ProductCardContent product={product} />
       <Typography sx={{ padding: "30px" }} variant="body1">
-        {PRODUCTS[parseInt(id!)].description}
+        {product.description}
       </Typography>
-      <Button variant="contained" size="large">
-        Add to Cart
-      </Button>
+      {product.listed && (
+        <Button variant="contained" size="large">
+          Add to Cart
+        </Button>
+      )}
     </Stack>
   );
 }
@@ -165,6 +157,7 @@ function CartPage() {
   );
 }
 
+// needs on apply
 function PriceFilter() {
   return (
     <Box display="flex" gap={2}>
@@ -174,7 +167,7 @@ function PriceFilter() {
         type="number"
         variant="outlined"
         size="small"
-        InputProps={{ inputProps: { min: 0 } }}
+        slotProps={{ htmlInput: { min: 0 } }}
       />
       <TextField
         fullWidth
@@ -182,7 +175,7 @@ function PriceFilter() {
         type="number"
         variant="outlined"
         size="small"
-        InputProps={{ inputProps: { min: 0 } }}
+        slotProps={{ htmlInput: { min: 0 } }}
       />
       <Button variant="contained" size="small">
         Apply
@@ -216,6 +209,51 @@ function SearchPage() {
   );
 }
 
+function UpdatePasswordPage() {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleUpdate = () => {
+    // todo
+  };
+
+  return (
+    <Stack spacing={2} sx={{ maxWidth: 400, margin: "auto", mt: 4 }}>
+      <Typography variant="h5">Update Password</Typography>
+      <TextField
+        label="Current Password"
+        type="password"
+        value={currentPassword}
+        onChange={(e) => setCurrentPassword(e.target.value)}
+      />
+      <TextField
+        label="New Password"
+        type="password"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+      />
+      <TextField
+        label="Confirm New Password"
+        type="password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
+      <Button variant="contained" onClick={handleUpdate}>
+        Update Password
+      </Button>
+      {message && (
+        <Typography
+          color={message.includes("successfully") ? "green" : "error"}
+        >
+          {message}
+        </Typography>
+      )}
+    </Stack>
+  );
+}
+
 function Home() {
   return (
     <Stack spacing={2} sx={{ maxWidth: 600, margin: "auto" }}>
@@ -227,6 +265,14 @@ function Home() {
       </Button>
       <Button component={Link} href={`/search`} variant="outlined" size="large">
         Search
+      </Button>
+      <Button
+        component={Link}
+        href={`/password`}
+        variant="outlined"
+        size="large"
+      >
+        Update Password
       </Button>
     </Stack>
   );
@@ -256,6 +302,7 @@ export default function App() {
           </Route>
           <Route path="/product/:id" component={ProductPage} />
           <Route path="/search" component={SearchPage} />
+          <Route path="/password" component={UpdatePasswordPage} />
           <Route path="/cart" component={CartPage} />
           <Route>404 - Page not found</Route>
         </Switch>
