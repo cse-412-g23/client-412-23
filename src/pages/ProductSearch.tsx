@@ -10,7 +10,7 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import ProductCardContent from "../components/Product";
+import ProductCardContent, { AddToCartButton } from "../components/Product";
 import SearchIcon from "@mui/icons-material/Search";
 import { gql, useLazyQuery } from "@apollo/client";
 import { useRoute, Link } from "wouter";
@@ -106,10 +106,7 @@ export default function ProductSearch() {
               View
             </Button>
             <Box flexGrow={1} />
-            {/* todo */}
-            <Button variant="contained" size="small">
-              Add to Cart
-            </Button>
+            <AddToCartButton productKey={item.key} size="small" />
           </CardActions>
         </Card>
       ))}

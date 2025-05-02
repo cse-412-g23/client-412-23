@@ -1,7 +1,7 @@
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "wouter";
 import { Stack, Typography, Button } from "@mui/material";
-import ProductCardContent from "../components/Product";
+import ProductCardContent, { AddToCartButton } from "../components/Product";
 
 const GET_PRODUCT = gql`
   query GetProduct($key: Int!) {
@@ -35,11 +35,7 @@ export default function ProductPage() {
       <Typography sx={{ padding: "30px" }} variant="body1">
         {product.desc}
       </Typography>
-      {product.listed && (
-        <Button variant="contained" size="large">
-          Add to Cart
-        </Button>
-      )}
+      {product.listed && <AddToCartButton productKey={key} size="large" />}
     </Stack>
   );
 }

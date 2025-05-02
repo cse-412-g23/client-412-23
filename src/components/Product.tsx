@@ -1,4 +1,5 @@
-import { CardContent, Typography } from "@mui/material";
+import { CardContent, Typography, Button } from "@mui/material";
+import { gql, useMutation } from "@apollo/client";
 
 type ProductCardContentProps = {
   product: {
@@ -23,5 +24,40 @@ export default function ProductCardContent({
         ${Number(product.price).toFixed(2)}
       </Typography>
     </CardContent>
+  );
+}
+
+const ADD_TO_CART = gql`
+  mutation AddToCart($product: Int!) {
+    addToCart(product: $product)
+  }
+`;
+
+type AddToCartButtonProps = {
+  productKey: number;
+  size?: "small" | "medium" | "large";
+};
+
+export function AddToCartButton({
+  productKey,
+  size = "large",
+}: AddToCartButtonProps) {
+  const [addToCart, { loading, error }] = useMutation(ADD_TO_CART);
+
+  const handleClick = async () => {
+    await addToCart({ variables: { product: productKey } });
+  };
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        size={size}
+        onClick={handleClick}
+        disabled={loading}
+      >
+        Add to Cart
+      </Button>
+    </>
   );
 }
