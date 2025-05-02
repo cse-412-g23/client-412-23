@@ -19,6 +19,8 @@ import {
 
 import Login from "./pages/Login";
 import SearchBar from "./components/SearchBar";
+import ProductSearch from "./pages/ProductSearch";
+import ProductPage from "./pages/ProductPage";
 
 const PRODUCTS = [
   {
@@ -91,32 +93,12 @@ function ProductCardContent({ product }) {
         {product.name}
       </Typography>
       <Typography gutterBottom sx={{ color: "text.secondary", fontSize: 14 }}>
-        Seller: {product.seller}
+        Stock: {product.qty}
       </Typography>
       <Typography variant="body1" color="text.secondary">
         ${product.price}
       </Typography>
     </CardContent>
-  );
-}
-
-function ProductPage() {
-  const { id } = useParams();
-
-  const product = PRODUCTS[parseInt(id!)];
-
-  return (
-    <Stack sx={{ maxWidth: 600, margin: "auto" }}>
-      <ProductCardContent product={product} />
-      <Typography sx={{ padding: "30px" }} variant="body1">
-        {product.description}
-      </Typography>
-      {product.listed && (
-        <Button variant="contained" size="large">
-          Add to Cart
-        </Button>
-      )}
-    </Stack>
   );
 }
 
@@ -144,30 +126,6 @@ function CartPage() {
             <Box flexGrow={1} />
             <Typography variant="body1">Qty: TODO</Typography>
             <Button variant="contained">Remove All</Button>
-          </CardActions>
-        </Card>
-      ))}
-    </Stack>
-  );
-}
-
-function SearchPage() {
-  const items = PRODUCTS;
-
-  return (
-    <Stack spacing={2} sx={{ maxWidth: 600, margin: "auto" }}>
-      <SearchBar onSearch={(s) => {}} />
-      {items.map((item) => (
-        <Card>
-          <ProductCardContent product={item} />
-          <CardActions>
-            <Button component={Link} href={`/product/${item.id}`} size="small">
-              View
-            </Button>
-            <Box flexGrow={1} />
-            <Button variant="contained" size="small">
-              Add to Cart
-            </Button>
           </CardActions>
         </Card>
       ))}
@@ -218,8 +176,12 @@ export default function App() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/login" component={Login} />
+
           <Route path="/product/:id" component={ProductPage} />
-          <Route path="/search" component={SearchPage} />
+
+          <Route path="/search" component={ProductSearch} />
+          <Route path="/search/:txt" component={ProductSearch} />
+
           <Route path="/cart" component={CartPage} />
           <Route>404 - Page not found</Route>
         </Switch>
