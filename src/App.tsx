@@ -1,6 +1,4 @@
-import React from "react";
-import { useState } from "react";
-import { useRoute, useParams, Route, Link, Switch } from "wouter";
+import { useRoute, useLocation, Route, Link, Switch } from "wouter";
 import { AppBar, Toolbar, Typography, Button, Box, Stack } from "@mui/material";
 
 import Login from "./pages/Login";
@@ -10,31 +8,56 @@ import CartPage from "./pages/CartPage";
 import PurchasesPage from "./pages/PurchasesPage";
 
 function Home() {
-  let msg = "Not logged in";
   const token = localStorage.getItem("token412");
+
+  const [, setLocation] = useLocation();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token412");
+    setLocation("/login");
+  };
+
   if (token) {
-    msg = "logged in";
+    return (
+      <Stack spacing={2} sx={{ maxWidth: 600, margin: "auto" }}>
+        <Button variant="outlined" size="large" onClick={handleLogout}>
+          Logout
+        </Button>
+        <Button
+          component={Link}
+          href={`/login`}
+          variant="outlined"
+          size="large"
+        >
+          Switch Account
+        </Button>
+        <Button component={Link} href={`/cart`} variant="outlined" size="large">
+          Cart
+        </Button>
+        <Button
+          component={Link}
+          href={`/search`}
+          variant="outlined"
+          size="large"
+        >
+          Search
+        </Button>
+        <Button
+          component={Link}
+          href={`/purchases`}
+          variant="outlined"
+          size="large"
+        >
+          Purchases
+        </Button>
+      </Stack>
+    );
   }
 
   return (
     <Stack spacing={2} sx={{ maxWidth: 600, margin: "auto" }}>
-      <Typography>{msg}</Typography>
       <Button component={Link} href={`/login`} variant="outlined" size="large">
         Login
-      </Button>
-      <Button component={Link} href={`/cart`} variant="outlined" size="large">
-        Cart
-      </Button>
-      <Button component={Link} href={`/search`} variant="outlined" size="large">
-        Search
-      </Button>
-      <Button
-        component={Link}
-        href={`/purchases`}
-        variant="outlined"
-        size="large"
-      >
-        Purchases
       </Button>
     </Stack>
   );
