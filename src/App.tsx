@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import ProductSearch from "./pages/ProductSearch";
 import ProductPage from "./pages/ProductPage";
 import CartPage from "./pages/CartPage";
+import PurchasesPage from "./pages/PurchasesPage";
 
 function Home() {
   let msg = "Not logged in";
@@ -26,6 +27,14 @@ function Home() {
       </Button>
       <Button component={Link} href={`/search`} variant="outlined" size="large">
         Search
+      </Button>
+      <Button
+        component={Link}
+        href={`/purchases`}
+        variant="outlined"
+        size="large"
+      >
+        Purchases
       </Button>
     </Stack>
   );
@@ -58,6 +67,7 @@ export default function App() {
           <Route path="/search/:txt" component={ProductSearch} />
 
           <Route path="/cart" component={CartPage} />
+          <Route path="/purchases" component={PurchasesPage} />
           <Route>404 - Page not found</Route>
         </Switch>
       </Box>

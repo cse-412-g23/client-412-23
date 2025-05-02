@@ -93,31 +93,34 @@ export default function CartPage() {
         Checkout
       </Button>
 
-      {items.map((item) => (
-        <Card key={item.key}>
-          <ProductCardContent product={item.product} />
-          <CardActions>
-            <Button
-              component={Link}
-              href={`/product/${item.product.key}`}
-              size="small"
-            >
-              View
-            </Button>
-            <Box flexGrow={1} />
-            <Button
-              variant="contained"
-              color="error"
-              size="small"
-              onClick={() =>
-                removeFromCart({ variables: { cartItem: item.key } })
-              }
-            >
-              Remove
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
+      {items
+        .slice()
+        .reverse()
+        .map((item) => (
+          <Card key={item.key}>
+            <ProductCardContent product={item.product} />
+            <CardActions>
+              <Button
+                component={Link}
+                href={`/product/${item.product.key}`}
+                size="small"
+              >
+                View
+              </Button>
+              <Box flexGrow={1} />
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                onClick={() =>
+                  removeFromCart({ variables: { cartItem: item.key } })
+                }
+              >
+                Remove
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
     </Stack>
   );
 }
