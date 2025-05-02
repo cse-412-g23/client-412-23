@@ -8,18 +8,45 @@ import {
   Card,
   CardContent,
 } from "@mui/material";
+import { gql, useMutation } from "@apollo/client";
+import { useLocation } from "wouter";
 
-type LoginProps = {
-  onLogin: (token: string) => void;
-};
+const LOGIN_USER = gql`
+  mutation LoginUser($email: String!, $password: String!) {
+    loginUser(email: $email, password: $password)
+  }
+`;
 
-export default function Login({ onLogin }: LoginProps) {
-  const [username, setUsername] = useState("");
+export default function Login() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [, setLocation] = useLocation();
 
-  const handleSubmit = async (_e: React.FormEvent) => {
-    // todo: auth
+  const [loginUser] = useMutation(LOGIN_USER);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const { data } = await loginUser({
+        variables: {
+          email,
+          password,
+        },
+      });
+
+      const token = data?.loginUser;
+      if (token) {
+        localStorage.setItem("token412", token);
+        setLocation("/"); // redirect to home
+      } else {
+        setError("Invalid Credentials");
+      }
+    } catch (_) {
+      setError("Internal Error");
+    }
   };
 
   return (
@@ -30,9 +57,10 @@ export default function Login({ onLogin }: LoginProps) {
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
             <TextField
               fullWidth
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              label="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               sx={{ mb: 2 }}
             />
             <TextField

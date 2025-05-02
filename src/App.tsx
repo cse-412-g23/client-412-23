@@ -17,7 +17,7 @@ import {
   Stack,
 } from "@mui/material";
 
-import Login from "./Login";
+import Login from "./pages/Login";
 import SearchBar from "./components/SearchBar";
 
 const PRODUCTS = [
@@ -176,8 +176,15 @@ function SearchPage() {
 }
 
 function Home() {
+  let msg = "Not logged in";
+  const token = localStorage.getItem("token412");
+  if (token) {
+    msg = "logged in";
+  }
+
   return (
     <Stack spacing={2} sx={{ maxWidth: 600, margin: "auto" }}>
+      <Typography>{msg}</Typography>
       <Button component={Link} href={`/login`} variant="outlined" size="large">
         Login
       </Button>
@@ -210,9 +217,7 @@ export default function App() {
       <Box sx={{ mt: 4 }}>
         <Switch>
           <Route path="/" component={Home} />
-          <Route path="/login">
-            <Login onLogin={(_) => {}}></Login>
-          </Route>
+          <Route path="/login" component={Login} />
           <Route path="/product/:id" component={ProductPage} />
           <Route path="/search" component={SearchPage} />
           <Route path="/cart" component={CartPage} />
